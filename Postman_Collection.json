@@ -1,0 +1,352 @@
+{
+  "info": {
+    "_postman_id": "davide-iasella-rimborsi",
+    "name": "Gestione Rimborsi Spese Aziendali",
+    "description": "API per gestione richieste di rimborso spese",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Autenticazione",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Davide\",\n  \"cognome\": \"Iasella\",\n  \"email\": \"davide.iasella@company.com\",\n  \"password\": \"password123\",\n  \"confirmPassword\": \"password123\",\n  \"ruolo\": \"Dipendente\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/utenti/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["utenti", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  var jsonData = pm.response.json();",
+                  "  pm.environment.set(\"token\", jsonData.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"mario.rossi@company.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/utenti/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["utenti", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rimborsi",
+      "item": [
+        {
+          "name": "Elenco Rimborsi",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rimborsi?stato=&categoria=&mese=",
+              "host": ["{{baseUrl}}"],
+              "path": ["rimborsi"],
+              "query": [
+                {
+                  "key": "stato",
+                  "value": "",
+                  "description": "In attesa, Approvata, Rifiutata, Liquidata"
+                },
+                {
+                  "key": "categoria",
+                  "value": "",
+                  "description": "ID categoria"
+                },
+                {
+                  "key": "mese",
+                  "value": "",
+                  "description": "YYYY-MM"
+                },
+                {
+                  "key": "dipendente",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Solo per responsabili"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Dettaglio Rimborso",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rimborsi/{{richiestaId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["rimborsi", "{{richiestaId}}"]
+            }
+          }
+        },
+        {
+          "name": "Crea Richiesta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dataSpesa\": \"2026-06-05\",\n  \"categoriaId\": \"{{categoriaId}}\",\n  \"importo\": 150.50,\n  \"descrizione\": \"Trasferta a Milano\",\n  \"riferimentoGiustificativo\": \"Scontrino #12345\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rimborsi",
+              "host": ["{{baseUrl}}"],
+              "path": ["rimborsi"]
+            }
+          }
+        },
+        {
+          "name": "Modifica Richiesta",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dataSpesa\": \"2026-06-05\",\n  \"categoriaId\": \"{{categoriaId}}\",\n  \"importo\": 200.00,\n  \"descrizione\": \"Trasferta a Milano - Aggiornato\",\n  \"riferimentoGiustificativo\": \"Scontrino #12345\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rimborsi/{{richiestaId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["rimborsi", "{{richiestaId}}"]
+            }
+          }
+        },
+        {
+          "name": "Elimina Richiesta",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rimborsi/{{richiestaId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["rimborsi", "{{richiestaId}}"]
+            }
+          }
+        },
+        {
+          "name": "Approva Richiesta",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rimborsi/{{richiestaId}}/approva",
+              "host": ["{{baseUrl}}"],
+              "path": ["rimborsi", "{{richiestaId}}", "approva"]
+            }
+          }
+        },
+        {
+          "name": "Rifiuta Richiesta",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"motivazione\": \"Documentazione incompleta\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rimborsi/{{richiestaId}}/rifiuta",
+              "host": ["{{baseUrl}}"],
+              "path": ["rimborsi", "{{richiestaId}}", "rifiuta"]
+            }
+          }
+        },
+        {
+          "name": "Liquida Richiesta",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rimborsi/{{richiestaId}}/liquida",
+              "host": ["{{baseUrl}}"],
+              "path": ["rimborsi", "{{richiestaId}}", "liquida"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categorie",
+      "item": [
+        {
+          "name": "Elenco Categorie",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/categorie-spesa",
+              "host": ["{{baseUrl}}"],
+              "path": ["categorie-spesa"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Statistiche",
+      "item": [
+        {
+          "name": "Statistiche Rimborsi",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/statistiche/rimborsi?mese=2026-06&categoriaId=&dipendenteId=",
+              "host": ["{{baseUrl}}"],
+              "path": ["statistiche", "rimborsi"],
+              "query": [
+                {
+                  "key": "mese",
+                  "value": "2026-06",
+                  "description": "YYYY-MM"
+                },
+                {
+                  "key": "categoriaId",
+                  "value": "",
+                  "description": "ID categoria (opzionale)"
+                },
+                {
+                  "key": "dipendenteId",
+                  "value": "",
+                  "description": "ID dipendente (opzionale)"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://test-9-6-26.onrender.com/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "richiestaId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "categoriaId",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
