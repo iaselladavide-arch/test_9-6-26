@@ -1,0 +1,14 @@
+{
+  "name": "gestione-rimborsi-spese",
+  "version": "1.0.0",
+  "description": "Applicazione web full stack per la gestione delle richieste di rimborso spese aziendali",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm --prefix backend run dev\" \"npm --prefix frontend run dev\"",
+    "build": "npm --prefix backend run build && npm --prefix frontend run build",
+    "start": "npm --prefix backend start"
+  },
+  "keywords": ["rimborsi", "spese", "aziendali", "react", "nodejs"],
+  "author": "Davide Iasella",
+  "license": "MIT"
+}

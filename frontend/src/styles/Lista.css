@@ -1,0 +1,122 @@
+.lista-rimborsi {
+  margin-top: 20px;
+}
+
+.rimborsi-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.rimborsi-table thead {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.rimborsi-table th {
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.rimborsi-table td {
+  padding: 12px;
+  border-bottom: 1px solid #dee2e6;
+  font-size: 14px;
+}
+
+.rimborsi-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.actions {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.btn-small {
+  padding: 6px 12px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.btn-view {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.btn-view:hover {
+  background-color: #138496;
+}
+
+.btn-edit {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.btn-edit:hover {
+  background-color: #e0a800;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+.btn-small:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 1024px) {
+  .rimborsi-table {
+    font-size: 12px;
+  }
+
+  .rimborsi-table th,
+  .rimborsi-table td {
+    padding: 8px;
+  }
+
+  .btn-small {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 768px) {
+  .rimborsi-table {
+    font-size: 11px;
+  }
+
+  .rimborsi-table th,
+  .rimborsi-table td {
+    padding: 6px;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .btn-small {
+    width: 100%;
+    padding: 4px;
+  }
+}
