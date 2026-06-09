@@ -5,6 +5,11 @@ const mongoose = require('mongoose');
 
 const app = express();
 
+if (!process.env.MONGODB_URI) {
+  console.error('ERRORE: MONGODB_URI non definito nelle variabili d\'ambiente');
+  process.exit(1);
+}
+
 const corsOptions = {
   origin: [
     'http://localhost:5173',
@@ -17,14 +22,21 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI, {
+  maxPoolSize: 10,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+})
   .then(() => {
-    console.log('Connesso a MongoDB');
+    console.log('✅ Connesso a MongoDB');
     initializeDatabase();
   })
   .catch(err => {
-    console.error('Errore nella connessione a MongoDB:', err);
-    process.exit(1);
+    console.error('❌ Errore MongoDB:', err.message);
+    console.error('Retrying connection...');
+    setTimeout(() => {
+      mongoose.connect(process.env.MONGODB_URI);
+    }, 5000);
   });
 
 app.use('/api/utenti', require('./routes/auth'));
